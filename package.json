@@ -1,0 +1,34 @@
+{
+  "name": "cisc",
+  "version": "0.0.7",
+  "description": "cats in sports cars",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kpenname/cisc.git"
+  },
+  "keywords": [
+    "cats",
+    "sportscars",
+    "tutorial"
+  ],
+  "author": "Karen Fahey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kpenname/cisc/issues"
+  },
+  "homepage": "https://github.com/kpenname/cisc#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "hbs": "^4.1.0",
+    "mariadb": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
