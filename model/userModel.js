@@ -19,6 +19,9 @@ module.exports = {
       [user]
     );
     conn.end();
+
+      console.log(row[0]);
+
    // check if there are matching users
     if(row[0] !== undefined) {
       //check if the hash matches

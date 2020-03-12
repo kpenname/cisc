@@ -22,7 +22,12 @@ async function getPageWithDefault(req, res) {
 
   //console.log(menu);
   if (page[0] !== undefined) {
-    res.render("pageView", { page: page[0], menu: menu });
+    res.render("pageView", {
+      page: page[0],
+      menu: menu,
+      user: req.user
+       });
+       
   } else {
     //res.statusMessage = "Page not available";
     res.status(404);
