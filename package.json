@@ -24,6 +24,7 @@
   "homepage": "https://github.com/kpenname/cisc#readme",
   "dependencies": {
     "cookie-parser": "^1.4.4",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "hbs": "^4.1.0",
     "mariadb": "^2.2.0"
