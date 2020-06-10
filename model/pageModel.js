@@ -1,13 +1,7 @@
 const db = require("../config/db");
 
 module.exports = {
-  editPage: async function(
-    pageKey,
-    title,
-    content,
-    shownInMenu,
-    menuOrder
-  ) {
+  editPage: async function (pageKey, title, content, shownInMenu, menuOrder) {
     if (shownInMenu === undefined) {
       shownInMenu = false;
     }
@@ -28,13 +22,7 @@ module.exports = {
       return { error: e.message };
     }
   },
-  addPage: async function(
-    pageKey,
-    title,
-    content,
-    shownInMenu,
-    menuOrder
-  ) {
+  addPage: async function (pageKey, title, content, shownInMenu, menuOrder) {
     if (shownInMenu === undefined) {
       shownInMenu = false;
     }
@@ -55,8 +43,7 @@ module.exports = {
       return { error: e.message };
     }
   },
-  getPage: async function(key) {
-    //key = tolowercase(trim(key));
+  getPage: async function (key) {
     let conn = await db.getConnection();
     const row = await conn.query(
       "SELECT pageKey, title,content FROM pages WHERE pageKey = ?",
@@ -65,12 +52,12 @@ module.exports = {
     conn.end();
     return row;
   },
-  getMenu: async function() {
+  getMenu: async function () {
     let conn = await db.getConnection();
-    const rows = await conn.query(
+    const row = await conn.query(
       "SELECT pageKey, title FROM pages WHERE shownInMenu = 1 ORDER BY menuOrder"
     );
     conn.end();
-    return rows;
-  }
+    return row;
+  },
 };

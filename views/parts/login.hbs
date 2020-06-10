@@ -6,7 +6,7 @@
         <li><a href="/add/">Add Page</a></li>
     </ul>
 {{else}}
-<form id="login" action="{{page.pageKey}}" method="POST" enctype="application/x-www-form-urlencoded">
+<form id="login" action="{{page.pageKey}}" method="POST" enctype="multipart/form-data">
     <div>
         <label for="username">User:</label>
         <input id="username" type="text" name="username" />
