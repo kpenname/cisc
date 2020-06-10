@@ -1,0 +1,11 @@
+{{#if error}}
+<h1>Error: Could Not Add Page!</h1>
+    Key: <em>{{page.pageKey}}</em>
+    <code>{{error}}</code>
+{{else}}
+<h1>Page Added</h1>
+<p>
+    <em>View page: </em>
+    <a href="/{{page.pageKey}}">{{page.title}}</a>
+</p>
+{{/if}}

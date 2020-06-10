@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const db = require("./config/db");
-const defaultRouter = require("./routes/pageRoute");
+const defaultRouter = require("./routes/default");
 const hbs = require("hbs");
 const login = require("./middleware/login");
 const userModel = require("./model/userModel");
@@ -15,13 +15,12 @@ hbs.registerPartials(path.join(__dirname, "/views/parts"));
 app.set("view engine", "hbs");
 app.use(cookieParser());
 
-app.use(
-  "/res/",
-  express.static(path.join(__dirname, "/public"))
-);
+app.use("/res/", express.static(path.join(__dirname, "/public")));
 
+// login middleware
 app.use(login);
 
+// routes
 app.use("/", defaultRouter);
 
 app.listen(port, () => {

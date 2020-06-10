@@ -10,28 +10,26 @@ module.exports = {
     conn.end();
     return true;
   },
-// authenticate user with a cookie hash
+  // authenticate user with a cookie hash
   getAuthorizedWithHash: async function(user, hash) {
     let conn = await db.getConnection();
-     // run the prepared query finding the matching user
+    // run prepared query finding matching user
     const row = await conn.query(
       "SELECT * FROM users WHERE username = ?",
       [user]
     );
     conn.end();
 
-      console.log(row[0]);
+    // check if there are matching users
+    if (row[0] !== undefined) {
+      // check if hash matches
 
-   // check if there are matching users
-    if(row[0] !== undefined) {
-      //check if the hash matches
-      if(row[0].cookieHash === hash){
-        return { auth: true, user: row[0]};
+      if (row[0].cookieHash === hash) {
+        return { auth: true, user: row[0] };
       }
     }
     return { auth: false };
   },
-
   getAuthorizedWithPassword: async function(user, pwd) {
     let conn = await db.getConnection();
     const row = await conn.query(
@@ -39,12 +37,12 @@ module.exports = {
       [user]
     );
     conn.end();
-    const hash = crypto.createHash("sha1").update(pwd).digest("base64");
-
-      console.log(`*${hash}*`); //this shows me the password hash in the console
+    const hash = crypto
+      .createHash("sha1")
+      .update(pwd)
+      .digest("base64");
 
     if (row[0] !== undefined) {
-      console.log(row[0].passHash, hash);
       if (hash === row[0].passHash) {
         // if the user is authenticated
         const chash = crypto

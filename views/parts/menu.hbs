@@ -1,7 +1,8 @@
  <nav>
     <ul id="nav-menu">
         {{#each menu}}
-        <li><a class="menu_link" href="{{pageKey}}"> {{title}}</a></li>
+        <li><a class="menu_link" href="/{{pageKey}}"> {{title}}</a></li>
         {{/each}}
     </ul>
-    </nav>
+    {{> login}}
+</nav>

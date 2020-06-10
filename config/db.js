@@ -1,21 +1,21 @@
-const dbe = require("mariadb");
-const dbOpt = require("./keys");
+const dbEngine = require("mariadb");
+const dbOptions = require("./keys");
 
 module.exports = {
   connected: false,
-  init: function() {
+  init: function () {
     try {
-      this.pool = dbe.createPool(dbOpt);
+      this.pool = dbEngine.createPool(dbOptions);
       this.connected = true;
     } catch (e) {
-      console.log(e);
+      console.log(e + "you should connect the database server");
     }
   },
-  getConnection: async function() {
+  getConnection: async function () {
     if (this.connected) {
       return await this.pool.getConnection();
     } else {
       console.log("Database not connected!");
     }
-  }
+  },
 };
