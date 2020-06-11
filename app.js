@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 app.use("/res/", express.static(path.join(__dirname, "/public")));
 
-// login middleware
+// middleware
 app.use(login);
 
 // routes

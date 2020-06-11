@@ -1,5 +1,6 @@
 const db = require("../config/db");
 const crypto = require("crypto");
+
 module.exports = {
   setCookieHash: async function (user, chash) {
     let conn = await db.getConnection();
@@ -22,7 +23,6 @@ module.exports = {
     // check if there are matching users
     if (row[0] !== undefined) {
       // check if hash matches
-
       if (row[0].cookieHash === hash) {
         return { auth: true, user: row[0] };
       }
@@ -42,9 +42,46 @@ module.exports = {
         // if the user is authenticated
         const chash = crypto.createHash("sha1").update(hash).digest("base64");
         this.setCookieHash(user, chash);
-        return { auth: true, user: row[0], cookieHash: chash };
+        return { auth: true, user: row[0], cookieHash: chash }; // this where the console.log comes from
       }
     }
     return { auth: false };
+  },
+  createNewAccount: async function (user, pwd) {
+    const hash = crypto.createHash("sha1").update(pwd).digest("base64");
+
+    let conn = await db.getConnection();
+    const row = await conn.query(
+      "INSERT INTO users (username, passHash) VALUES (?,?)",
+      [user, hash]
+    );
+    conn.end();
+    if (row[0] !== undefined) {
+      if (hash === row[0].passHash) {
+        const chash = crypto.createHash("sha1").update(hash).digest("base64");
+        this.setCookieHash(user, chash);
+        return { auth: true, user: row[0], cookieHash: chash };
+      }
+    }
+
+    return { auth: false };
+  },
+  getUserInfo: async function (user) {
+    let conn = await db.getConnection();
+    const row = await conn.query("SELECT * FROM users WHERE username = ?;", [
+      user,
+    ]);
+
+    conn.end();
+    this.updateAccount(row);
+  },
+
+  updateAccount: async function (user) {
+    let conn = await db.getConnection();
+    const row = await conn.query("UPDATE users SET first WHERE userId = ?", [
+      user[0].userId,
+    ]);
+    conn.end();
+    return { user: row[0] };
   },
 };
