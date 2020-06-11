@@ -1,24 +1,24 @@
-<form action="" method="POST" enctype="application/x-www-form-urlencoded">
+<form action="{{#if page.data}}./{{/if}}" method="POST" enctype="application/x-www-form-urlencoded">
     <div>
         <label for="pageKey">Page Key:</label>
-        <input name="pageKey" />
+        <input name="pageKey" value="{{page.data.pageKey}}" />
     </div>
     <div>
         <label for="title">Title:</label>
-        <input name="title" />
+        <input name="title" value="{{page.data.title}}"/>
     </div>
     <div>
         <label for="shownInMenu">In Menu: </label>
-        <input type="checkbox" name="shownInMenu" />
+        <input type="checkbox" name="shownInMenu" {{#if page.data.shownInMenu}}checked{{/if}} />
     </div>
     <div>
         <label for="menuOrder">Menu Order: </label>
-        <input type="number" name="menuOrder" />
+        <input type="number" name="menuOrder" value={{page.data.menuOrder}} />
     </div>
 
     <div>
         <h2>HTML</h2>
-        <textarea name="content"></textarea>
+        <textarea name="content">{{page.data.content}}</textarea>
     </div>
     <input type="submit" value="Save" />
 </form>

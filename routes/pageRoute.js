@@ -1,51 +1,126 @@
-const db = require("../config/db");
-const crypto = require("crypto");
+const router = require("express").Router();
+const pageModel = require("../model/pageModel");
 
-module.exports = {
-  setCookieHash: async function (user, chash) {
-    let conn = await db.getConnection();
-    const row = await conn.query(
-      "UPDATE `users` SET `cookieHash`=? WHERE `username`=?",
-      [chash, user]
+// router.post("/login", async (req, res) => {
+//   console.log(req.body);
+//   res.send("body " + req.body.username);
+// });
+
+router.all("/", async (req, res) => {
+  getPageWithDefault(req, res);
+});
+
+router.post("/edit/", async (req, res, next) => {
+  if (req.user !== undefined && req.user.auth) {
+    let d = req.body;
+    const result = await pageModel.editPage(
+      d.pageKey,
+      d.title,
+      d.content,
+      d.shownInMenu === "on",
+      d.menuOrder
     );
-    conn.end();
-    return true;
-  },
-  // authenticate user with a cookie hash
-  getAuthorizedWithHash: async function (user, hash) {
-    let conn = await db.getConnection();
-    // run prepared query finding matching user
-    const row = await conn.query("SELECT * FROM users WHERE username = ?", [
-      user,
-    ]);
-    conn.end();
 
-    // check if there are matching users
-    if (row[0] !== undefined) {
-      // check if hash matches
-
-      if (row[0].cookieHash === hash) {
-        return { auth: true, user: row[0] };
-      }
+    if (result.error !== undefined) {
+      res.render("editedPageView", {
+        page: { title: "Error Edit Page", pageKey: d.pageKey },
+        added: false,
+        user: req.user,
+        error: result.error,
+      });
+    } else {
+      res.render("editedPageView", {
+        page: { title: d.title, pageKey: d.pageKey },
+        user: req.user,
+        added: false,
+        menu: await pageModel.getMenu(),
+      });
     }
-    return { auth: false };
-  },
-  getAuthorizedWithPassword: async function (user, pwd) {
-    let conn = await db.getConnection();
-    const row = await conn.query("SELECT * FROM users WHERE username = ?", [
-      user,
-    ]);
-    conn.end();
-    const hash = crypto.createHash("sha1").update(pwd).digest("base64");
+  } else {
+    next();
+  }
+});
+router.post("/add/", async (req, res, next) => {
+  if (req.user !== undefined && req.user.auth) {
+    let d = req.body;
+    const result = await pageModel.addPage(
+      d.pageKey,
+      d.title,
+      d.content,
+      d.shownInMenu === "on",
+      d.menuOrder
+    );
 
-    if (row[0] !== undefined) {
-      if (hash === row[0].passHash) {
-        // if the user is authenticated
-        const chash = crypto.createHash("sha1").update(hash).digest("base64");
-        this.setCookieHash(user, chash);
-        return { auth: true, user: row[0], cookieHash: chash };
-      }
+    if (result.error !== undefined) {
+      res.render("editedPageView", {
+        page: { title: "Error Adding Page", pageKey: d.pageKey },
+        user: req.user,
+        added: true,
+        error: result.error,
+      });
+    } else {
+      res.render("editedPageView", {
+        page: { title: d.title, pageKey: d.pageKey },
+        user: req.user,
+        added: true,
+        menu: await pageModel.getMenu(),
+      });
     }
-    return { auth: false };
-  },
-};
+  } else {
+    next();
+  }
+});
+
+router.get("/add/", async (req, res, next) => {
+  if (req.user !== undefined && req.user.auth) {
+    let menu = await pageModel.getMenu();
+    res.render("editPageView", {
+      page: { title: "Add Page" },
+      menu: menu,
+      user: req.user,
+    });
+  } else {
+    next();
+  }
+});
+
+router.get("/edit/:key", async (req, res, next) => {
+  if (req.user !== undefined && req.user.auth) {
+    let menu = await pageModel.getMenu();
+    let page = await pageModel.getPage(req.params.key);
+    res.render("editPageView", {
+      page: { title: "Edit Page", data: page[0] },
+      menu: menu,
+      user: req.user,
+    });
+  } else {
+    next();
+  }
+});
+
+router.all("/:key", async (req, res) => {
+  getPageWithDefault(req, res);
+});
+
+async function getPageWithDefault(req, res) {
+  if (req.params.key === undefined) {
+    req.params.key = "home";
+  }
+  let page = await pageModel.getPage(req.params.key);
+  let menu = await pageModel.getMenu();
+
+  console.log(req.user);
+  if (page[0] !== undefined) {
+    res.render("pageView", {
+      page: page[0],
+      menu: menu,
+      user: req.user,
+    });
+  } else {
+    //res.statusMessage = "Page not available";
+    res.status(404);
+    res.render("statusView", { code: 404, status: "Not Found" });
+  }
+}
+
+module.exports = router;

@@ -3,9 +3,9 @@
     Key: <em>{{page.pageKey}}</em>
     <code>{{error}}</code>
 {{else}}
-<h1>Page Added</h1>
+<h1>Page {{#if added}}Added{{else}}Edited{{/if}}</h1>
 <p>
-    <em>View page: </em>
+    <em>View page:</em>
     <a href="/{{page.pageKey}}">{{page.title}}</a>
 </p>
-{{/if}}
+{{/if}} 

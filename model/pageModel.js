@@ -13,7 +13,7 @@ module.exports = {
 
     try {
       const result = await conn.query(
-        "UPDATE `pages` SET menuOrder=?, title=?, shownInMenu=?, content=? WHERE  pageKey=?;",
+        "UPDATE `pages` SET menuOrder=?, title=?, shownInMenu=?, content=? WHERE pageKey=?;",
         [menuOrder, title, shownInMenu, content, pageKey]
       );
       conn.end();
@@ -44,9 +44,10 @@ module.exports = {
     }
   },
   getPage: async function (key) {
+    //key = tolowercase(trim(key));
     let conn = await db.getConnection();
     const row = await conn.query(
-      "SELECT pageKey, title,content FROM pages WHERE pageKey = ?",
+      "SELECT pageKey, title,content, shownInMenu, menuOrder FROM pages WHERE pageKey = ?",
       [key]
     );
     conn.end();
@@ -54,10 +55,10 @@ module.exports = {
   },
   getMenu: async function () {
     let conn = await db.getConnection();
-    const row = await conn.query(
+    const rows = await conn.query(
       "SELECT pageKey, title FROM pages WHERE shownInMenu = 1 ORDER BY menuOrder"
     );
     conn.end();
-    return row;
+    return rows;
   },
 };

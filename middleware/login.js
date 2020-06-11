@@ -6,24 +6,18 @@ module.exports = async (req, res, next) => {
     res.clearCookie("chash");
     res.user = { auth: false };
   } else {
-    if (
-      req.body.username !== undefined &&
-      req.body.password !== undefined
-    ) {
+    if (req.body.username !== undefined && req.body.password !== undefined) {
       let user = req.body.username.trim().toLowerCase();
       let pwd = req.body.password;
 
-      const userStatus = await userModel.getAuthorizedWithPassword(
-        user,
-        pwd
-      );
+      const userStatus = await userModel.getAuthorizedWithPassword(user, pwd);
       req.user = userStatus;
       if (userStatus.auth) {
         res.cookie("user", userStatus.user.username, {
-          maxAge: 1000 * 60 * 60 * 12
+          maxAge: 1000 * 60 * 60 * 12,
         });
         res.cookie("chash", userStatus.cookieHash, {
-          maxAge: 1000 * 60 * 60 * 12
+          maxAge: 1000 * 60 * 60 * 12,
         });
       }
     } else if (
