@@ -106,7 +106,7 @@ async function getPageWithDefault(req, res) {
 
   console.log(req.user);
   if (page[0] !== undefined) {
-    res.render("pageView", {
+    res.render("userView", {
       page: page[0],
       menu: menu,
       user: req.user,

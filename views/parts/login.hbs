@@ -1,19 +1,9 @@
-
 {{#if user.auth}}
     Hello {{user.user.first}} 
     <ul>
         <li><a href="?logout=1">Logout</a></li>
         <li><a href="/add/">Add Page</a></li>
     </ul>
-    <br/>
-    <hr>
-    <form id="update" action="{{page.pageKey}}" method="POST" enctype="application/x-www-form-urlencoded">
-        <div>
-            <label for="firstName">Tell us your First name:</label>
-            <input id="password" type="text" name="firstName" />
-        </div>
-            <input type="submit" value="Update your Account" />
-    </form>
 
 {{else}}
 
@@ -30,7 +20,8 @@
 </form>
 <br/>
 <hr>
-<form id="create" action="{{page.pageKey}}" method="POST" enctype="application/x-www-form-urlencoded">
+Create an Account<hr/>
+<form id="create" action="/addAccount" method="POST" enctype="application/x-www-form-urlencoded">
     <div>
         <label for="username">Choose a username:</label>
         <input id="username" type="text" name="createUsername" />

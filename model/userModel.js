@@ -47,41 +47,34 @@ module.exports = {
     }
     return { auth: false };
   },
-  createNewAccount: async function (user, pwd) {
-    const hash = crypto.createHash("sha1").update(pwd).digest("base64");
 
-    let conn = await db.getConnection();
-    const row = await conn.query(
-      "INSERT INTO users (username, passHash) VALUES (?,?)",
-      [user, hash]
-    );
-    conn.end();
-    if (row[0] !== undefined) {
-      if (hash === row[0].passHash) {
-        const chash = crypto.createHash("sha1").update(hash).digest("base64");
-        this.setCookieHash(user, chash);
-        return { auth: true, user: row[0], cookieHash: chash };
-      }
-    }
+  // getUserInfo: async function (username) {
+  //   let conn = await db.getConnection();
+  //   const row = await conn.query("SELECT * FROM users WHERE username = ?;", [
+  //     username,
+  //   ]);
 
-    return { auth: false };
-  },
-  getUserInfo: async function (user) {
-    let conn = await db.getConnection();
-    const row = await conn.query("SELECT * FROM users WHERE username = ?;", [
-      user,
-    ]);
+  //   if (row[0] !== undefine) {
+  //     return {
+  //       user: { userId: row.lastInsertedId, username: user },
+  //       cookieHash: chash,
+  //     };
+  //   }
+  //   conn.end();
+  // },
 
-    conn.end();
-    this.updateAccount(row);
-  },
-
-  updateAccount: async function (user) {
-    let conn = await db.getConnection();
-    const row = await conn.query("UPDATE users SET first WHERE userId = ?", [
-      user[0].userId,
-    ]);
-    conn.end();
-    return { user: row[0] };
-  },
+  // updateAccount: async function (first, userId) {
+  //   let conn = await db.getConnection();
+  //   const row = await conn.query("UPDATE users SET first WHERE userId = ?", [
+  //     userFirst,
+  //     userId,
+  //   ]);
+  //   conn.end();
+  //   if (row[0] !== undefine) {
+  //     return {
+  //       user: { userId: row.lastInsertedId, username: user },
+  //       cookieHash: chash,
+  //     };
+  //   }
+  // },
 };

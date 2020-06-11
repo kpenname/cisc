@@ -2,9 +2,11 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const db = require("./config/db");
-const defaultRouter = require("./routes/pageRoute");
+const pageRouter = require("./routes/pageRoute");
+const accountRouter = require("./routes/accountRoute");
 const hbs = require("hbs");
 const login = require("./middleware/login");
+
 const userModel = require("./model/userModel");
 
 const app = express();
@@ -21,7 +23,8 @@ app.use("/res/", express.static(path.join(__dirname, "/public")));
 app.use(login);
 
 // routes
-app.use("/", defaultRouter);
+app.use("/", pageRouter);
+app.use("/addAccount", accountRouter);
 
 app.listen(port, () => {
   db.init();

@@ -1,0 +1,15 @@
+{{#if user.auth}}<div class="adminToolbar"><a href="/edit/{{user.user.first}}">✏ Edit your account</a></div>{{/if}}
+{{#with user}}
+<h2>{{user.username}}, your first name is: {{user.first}}</h2>
+
+  <br/>
+  <hr>
+    <form id="update" action="{{page.pageKey}}" method="POST" enctype="application/x-www-form-urlencoded">
+      <div>
+        <label for="firstName">Tell us your First name:</label>
+        <input id="password" type="text" name="firstName" />
+      </div>
+        <input type="submit" value="Update your Account" />
+    </form>
+  
+{{/with}}
