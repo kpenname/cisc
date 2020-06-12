@@ -1,8 +1,9 @@
 const router = require("express").Router();
+const db = require("../config/db");
+const User = require("../model/userModel");
+const crypto = require("crypto");
 
-router.post("/addAccount", async (req, res, next) => {
-  console.log("here?"); // doesn't print this out.  Not getting here, no idea why.
-  //I didn't change this code from when it was working before, I just put it in a route file
+router.post("/add", async (req, res, next) => {
   if (req.user !== undefined) {
     let user = req.body.createUsername.trim().toLowerCase();
     let pwd = req.body.createPassword;
@@ -14,13 +15,21 @@ router.post("/addAccount", async (req, res, next) => {
       [user, hash]
     );
     conn.end();
+
     if (row.affectedRows === 1) {
       const chash = crypto.createHash("sha1").update(hash).digest("base64");
-      this.setCookieHash(user, chash);
+      let cookieHash = await User.setCookieHash(user, chash);
+
+      console.log(row.user.lastInsertedId);
+
+      res.render("userView", {
+        page: "home",
+        user: req.user,
+      });
       return {
         auth: true,
         user: { userId: row.lastInsertedId, username: user },
-        cookieHash: chash,
+        cookieHash: cookieHash,
       };
     }
   } else {

@@ -47,34 +47,4 @@ module.exports = {
     }
     return { auth: false };
   },
-
-  // getUserInfo: async function (username) {
-  //   let conn = await db.getConnection();
-  //   const row = await conn.query("SELECT * FROM users WHERE username = ?;", [
-  //     username,
-  //   ]);
-
-  //   if (row[0] !== undefine) {
-  //     return {
-  //       user: { userId: row.lastInsertedId, username: user },
-  //       cookieHash: chash,
-  //     };
-  //   }
-  //   conn.end();
-  // },
-
-  // updateAccount: async function (first, userId) {
-  //   let conn = await db.getConnection();
-  //   const row = await conn.query("UPDATE users SET first WHERE userId = ?", [
-  //     userFirst,
-  //     userId,
-  //   ]);
-  //   conn.end();
-  //   if (row[0] !== undefine) {
-  //     return {
-  //       user: { userId: row.lastInsertedId, username: user },
-  //       cookieHash: chash,
-  //     };
-  //   }
-  // },
 };

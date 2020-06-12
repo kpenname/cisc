@@ -23,8 +23,10 @@ app.use("/res/", express.static(path.join(__dirname, "/public")));
 app.use(login);
 
 // routes
+// the plain ("/") should be  the last in the list, if specifying other routes
+
+app.use("/account", accountRouter);
 app.use("/", pageRouter);
-app.use("/addAccount", accountRouter);
 
 app.listen(port, () => {
   db.init();
