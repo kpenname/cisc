@@ -32,7 +32,7 @@ router.post("/add", async (req, res, next) => {
       res.cookie("user", user, {
         maxAge: 1000 * 60 * 60 * 12,
       });
-      res.cookie("chash", cookieHash, {
+      res.cookie("chash", chash, {
         maxAge: 1000 * 60 * 60 * 12,
       });
 
@@ -50,7 +50,7 @@ router.post("/add", async (req, res, next) => {
 router.post("/update", async (req, res, next) => {
   if (req.user !== undefined) {
     let first = req.body.firstName.trim();
-    let userId = req.userId;
+    let userId = req.user.user.userId;
     let conn = await db.getConnection();
     const row = await conn.query(
       "UPDATE users SET first = ? WHERE userId = ?;",
@@ -59,7 +59,7 @@ router.post("/update", async (req, res, next) => {
     conn.end();
     // render the page view
     res.render("userView", {
-      page: "home",
+      pageKey: "home",
       user: req.user,
     });
   } else {

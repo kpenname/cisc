@@ -6,9 +6,6 @@ module.exports = async (req, res, next) => {
     res.clearCookie("user");
     res.clearCookie("chash");
     res.user = { auth: false };
-    res.render("homeView", {
-      page: "home",
-    });
   } else {
     if (req.body.username !== undefined && req.body.password !== undefined) {
       let user = req.body.username.trim().toLowerCase();

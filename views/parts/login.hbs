@@ -1,8 +1,18 @@
 {{#if user.auth}}
     Hello {{user.user.first}} 
     <ul>
-        <li><a href="?logout=1">Logout</a></li>
+        <li><a href="/?logout=1">Logout</a></li>
     </ul>
+
+<!-- 
+
+res.render("homeView", {
+      page: "home",
+    });
+
+-->
+
+
 
 {{else}}
 
